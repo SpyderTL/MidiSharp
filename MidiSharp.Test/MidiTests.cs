@@ -280,10 +280,12 @@ namespace MidiSharp.Test
 
 			Midi.ProgramChange(0, Midi.Patches.GrandPiano);
 			//Midi.ProgramChange(0, Midi.Patches.Celesta);
+			//Midi.ProgramChange(0, Midi.Patches.Xylophone);
 
 			for (var a = 0; a < 8; a++)
 			{
 				var seed = Random.Shared.Next();
+				// Piano
 				//seed = 1514958894;
 				//seed = 481331100;
 				//seed = 1433140728;
@@ -297,7 +299,16 @@ namespace MidiSharp.Test
 				//seed = 1388716506;
 				//seed = 567776082;
 				//seed = 1860969591;
+				//seed = 2132540857;
+				//seed = 877093789;
+				//seed = 510649281;
+				//seed = 1543158483;
+				//seed = 1113889446;
+				//seed = 2043185989;
+
+				// Celesta
 				//seed = 595956379;
+				//seed = 158225789;
 				var random = new Random(seed);
 
 				System.Diagnostics.Debug.WriteLine($"Seed: {seed}");
@@ -530,7 +541,7 @@ namespace MidiSharp.Test
 
 					System.Diagnostics.Debug.WriteLine($"note: {Midi.NoteNames[note]} chord: {Chord.Names[chord]}");
 
-					for (var y = 0; y < 2; y++)
+					for (var y = 0; y < 4; y++)
 					{
 						for (var x = 0; x < 8; x++)
 						{
@@ -551,34 +562,8 @@ namespace MidiSharp.Test
 
 					System.Diagnostics.Debug.WriteLine($"note: {Midi.NoteNames[note]} chord: {Chord.Names[chord]}");
 
-					for (var y = 0; y < 2; y++)
-					{
-						for (var x = 0; x < 8; x++)
-						{
-							await Play(0, 0, velocity[x], 200, Chord.Select(chord, Midi.Note(note, 2)).Skip(sequence[x]).First());
-						}
-					}
-				}
-
-				for (var z = 0; z < 1; z++)
-				{
-					Midi.ControlChange(0, Midi.Controls.SustainEnable, 0);
-					Midi.ControlChange(0, Midi.Controls.SustainEnable, 127);
-
-					var note = notes[z];
-					var chord = chords[z];
-					var sequence = sequences[z];
-					var velocity = velocities[z];
-
-					System.Diagnostics.Debug.WriteLine($"note: {Midi.NoteNames[note]} chord: {Chord.Names[chord]}");
-
-					for (var y = 0; y < 1; y++)
-					{
-						for (var x = 0; x < 1; x++)
-						{
-							await Play(0, 0, velocity[x], 200, Chord.Select(chord, Midi.Note(note, 2)).Skip(sequence[x]).First());
-						}
-					}
+					//await PlayAll(0, 0, velocity[0], 2000, 50, Chord.Select(chord, Midi.Note(note, 3)).Take(5));
+					await PlayAll(0, 0, velocity[0], 2000, 50, sequence.Select(x => Chord.Select(chord, Midi.Note(note, 2)).Skip(x).First()).Distinct());
 				}
 
 				await Task.Delay(10000);
